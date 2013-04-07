@@ -3,6 +3,6 @@ class UsersController < ApplicationController
     user = User.find_or_create_by_email(params[:user])
     session[:email] = user.email
 
-    redirect_to game_path
+    redirect_to play_path
   end
 end
