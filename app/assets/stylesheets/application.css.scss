@@ -33,7 +33,7 @@ header {
 .content {
   background: #fff;
   min-height: 200px;
-  margin: 20px;
+  margin-top: 20px;
   border-radius: 5px;
   border: 1px solid #ddd;
   padding-top: 30px;
@@ -54,26 +54,28 @@ form {
   }
 }
 
-.game {
-  width: 640px;
-  height: 640px;
+.board {
+  width: 360px;
+  height: 360px;
   margin-bottom: 30px;
+  margin-right: 50px;
   background: #ccc;
   border: 3px solid #999;
   padding: 2px 2px 1px 2px;
+  display: inline-table;
 
   .cell {
     float: left;
     background: #eef;
-    width: 62px;
-    height: 62px;
+    width: 34px;
+    height: 34px;
     border: 1px solid #999;
     cursor: pointer;
     position: relative;
 
     .ship {
-      width: 50px;
-      height: 50px;
+      width: 30px;
+      height: 30px;
       background: #789;
       position: absolute;
       display: block;
@@ -81,50 +83,46 @@ form {
 
     .ship.down {
       height: 100%;
-      left: 6px;
+      left: 2px;
     }
 
     .ship.right {
       width: 100%;
-      top: 6px;
+      top: 2px;
     }
 
     .ship.down.front {
-      height: 50px;
+      height: 30px;
       bottom: 0px;
     }
 
     .ship.down.back {
-      height: 50px;
+      height: 30px;
       top: 0px;
     }
 
     .ship.right.front {
-      width: 50px;
+      width: 30px;
       right: 0px;
     }
 
     .ship.right.back {
-      width: 50px;
+      width: 30px;
       left: 0px;
     }
 
     .ship.tiny {
-      width: 50px;
-      height: 50px;
-      top: 6px;
-      left: 6px;
+      width: 30px;
+      height: 30px;
+      top: 2px;
+      left: 2px;
     }
   }
 }
 
 .panel {
-  display: block;
-  position: absolute;
-  top: 30px;
-  right: 30px;
-  width: 220px;
-  height: 640px;
+  position: relative;
+  margin-bottom: 10px;
 
   h2, h4 {
     margin: 0;
@@ -148,7 +146,7 @@ form {
 
   .logout {
     position: absolute;
-    bottom: 0px;
+    top: 0px;
     right: 0px;
     color: #ccc;
     text-decoration: none;

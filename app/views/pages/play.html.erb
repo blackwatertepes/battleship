@@ -1,4 +1,13 @@
-<div class="game">
+<div class="panel">
+  <h2><%= current_user.name %></h2>
+  <h4><%= current_user.email %></h4>
+
+  <!--<%= link_to "New Game", start_path, class: :btn %>-->
+
+  <%= link_to "Logout", logout_path, class: :logout %>
+</div>
+
+<div class="board">
   <% @board.each do |row| %>
     <div class="row">
       <% row.each do |cell| %>
@@ -13,11 +22,13 @@
   <% end %>
 </div>
 
-<div class="panel">
-  <h2><%= current_user.name %></h2>
-  <h4><%= current_user.email %></h4>
-
-  <!--<%= link_to "New Game", start_path, class: :btn %>-->
-
-  <%= link_to "Logout", logout_path, class: :logout %>
+<div class="board">
+  <% 10.times do |row| %>
+    <div class="row">
+      <% 10.times do |cell| %>
+        <div class="cell">
+        </div>
+      <% end %>
+    </div>
+  <% end %>
 </div>

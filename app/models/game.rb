@@ -28,13 +28,13 @@ class Game < ActiveRecord::Base
 
   def add_boat(boat)
     boat[:boat] = Array.new(boat[:length])
-    row_i, cell_i, dir = self.find_gaps(boat[:length]).sample
+    row_i, cell_i, dir = self.find_gaps(boat[:length] + 2).sample
     
     boat[:length].times do |n|
       if dir == 'right'
-        @grid[row_i][cell_i + n] = {boat: boat, n: n, dir: dir}
+        @grid[row_i][cell_i + 1 + n] = {boat: boat, n: n, dir: dir}
       else
-        @grid[cell_i + n][row_i] = {boat: boat, n: n, dir: dir}
+        @grid[cell_i + 1 + n][row_i] = {boat: boat, n: n, dir: dir}
       end
     end
   end
