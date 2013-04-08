@@ -54,28 +54,37 @@ form {
   }
 }
 
-.board {
-  width: 360px;
-  height: 360px;
+.game {
+  display: inline-block;
   margin-bottom: 30px;
-  margin-right: 50px;
+  margin-right: 25px;
+}
+
+$board: 420px;
+$cell: $board / 10 - 2;
+$ship: $cell - 4;
+$gap: ($cell - $ship) / 2;
+
+.board {
+  width: $board;
+  height: $board;
   background: #ccc;
   border: 3px solid #999;
-  padding: 2px 2px 1px 2px;
-  display: inline-table;
+  padding: 2px;
+  display: table;
 
   .cell {
     float: left;
     background: #eef;
-    width: 34px;
-    height: 34px;
+    width: $cell;
+    height: $cell;
     border: 1px solid #999;
     cursor: pointer;
     position: relative;
 
     .ship {
-      width: 30px;
-      height: 30px;
+      width: $ship;
+      height: $ship;
       background: #789;
       position: absolute;
       display: block;
@@ -83,39 +92,39 @@ form {
 
     .ship.down {
       height: 100%;
-      left: 2px;
+      left: $gap;
     }
 
     .ship.right {
       width: 100%;
-      top: 2px;
+      top: $gap;
     }
 
     .ship.down.front {
-      height: 30px;
+      height: $ship;
       bottom: 0px;
     }
 
     .ship.down.back {
-      height: 30px;
+      height: $ship;
       top: 0px;
     }
 
     .ship.right.front {
-      width: 30px;
+      width: $ship;
       right: 0px;
     }
 
     .ship.right.back {
-      width: 30px;
+      width: $ship;
       left: 0px;
     }
 
     .ship.tiny {
-      width: 30px;
-      height: 30px;
-      top: 2px;
-      left: 2px;
+      width: $ship;
+      height: $ship;
+      top: $gap;
+      left: $gap;
     }
   }
 }

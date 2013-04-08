@@ -7,28 +7,34 @@
   <%= link_to "Logout", logout_path, class: :logout %>
 </div>
 
-<div class="board">
-  <% @board.each do |row| %>
-    <div class="row">
-      <% row.each do |cell| %>
-        <div class="cell">
-          <% if cell %>
-            <!--<%= "#{cell[:boat][:name][0]} #{cell[:n]}" %>-->
-            <div class="ship <%= boat_classes(cell).join(' ') %>"></div>
-          <% end %>
-        </div>
-      <% end %>
-    </div>
-  <% end %>
+<div class="game">
+  <h4>You</h4>
+  <div class="board">
+    <% @board.each do |row| %>
+      <div class="row">
+        <% row.each do |cell| %>
+          <div class="cell">
+            <% if cell %>
+              <!--<%= "#{cell[:boat][:name][0]} #{cell[:n]}" %>-->
+              <div class="ship <%= boat_classes(cell).join(' ') %>"></div>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
 </div>
 
-<div class="board">
-  <% 10.times do |row| %>
-    <div class="row">
-      <% 10.times do |cell| %>
-        <div class="cell">
-        </div>
-      <% end %>
-    </div>
-  <% end %>
+<div class="game">
+  <h4>Opponent</h4>
+  <div class="board">
+    <% 10.times do |row| %>
+      <div class="row">
+        <% 10.times do |cell| %>
+          <div class="cell">
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
 </div>
