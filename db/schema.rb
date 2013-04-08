@@ -14,8 +14,10 @@
 ActiveRecord::Schema.define(:version => 20130407035838) do
 
   create_table "games", :force => true do |t|
-    t.string   "board"
+    t.text     "board_user"
+    t.text     "board_comp"
     t.string   "winner"
+    t.integer  "user_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end

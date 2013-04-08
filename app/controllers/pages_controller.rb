@@ -8,8 +8,15 @@ class PagesController < ApplicationController
   def play
     redirect_to root_path unless current_user
 
-    @game = Game.new
-    @board = @game.board
+    if current_game
+      @game = current_game
+    else
+      @game = Game.new
+      session[:board] = @game.board_user
+    end
+
+    @board_user = @game.board_user
+    @board_comp = @game.board_comp
   end
 
   def logout

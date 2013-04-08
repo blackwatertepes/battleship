@@ -2,10 +2,11 @@ Battleship::Application.routes.draw do
   resources :users
   resources :games
   
-  get "start" => "games#create"
-  get "play"  => "pages#play"
-  get "logout" => "pages#logout"
-  post "proxy" => "pages#proxy"
+  get "/start" => "games#create"
+  get "/play"  => "pages#play"
+  get "/logout" => "pages#logout"
+  post "/proxy" => "pages#proxy"
+  get "/fire/:row/:cell" => "games#update", as: "fire"
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

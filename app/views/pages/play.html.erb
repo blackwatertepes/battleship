@@ -10,7 +10,7 @@
 <div class="game">
   <h4>You</h4>
   <div class="board">
-    <% @board.each do |row| %>
+    <% @board_user.each do |row| %>
       <div class="row">
         <% row.each do |cell| %>
           <div class="cell">
@@ -28,11 +28,12 @@
 <div class="game">
   <h4>Opponent</h4>
   <div class="board">
-    <% 10.times do |row| %>
+    <% @board_comp.each_with_index do |row, row_i| %>
       <div class="row">
-        <% 10.times do |cell| %>
-          <div class="cell">
-          </div>
+        <% row.each_with_index do |cell, cell_i| %>
+          <% status = cell && cell[:boat] && cell[:boat][:boat] ? "hit" : "" %>
+          <a href="<%= fire_path row_i, cell_i %>" class="cell <%= status %>">
+          </a>
         <% end %>
       </div>
     <% end %>

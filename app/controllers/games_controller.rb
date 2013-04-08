@@ -1,6 +1,3 @@
-require 'net/https'
-require 'uri'
-
 class GamesController < ApplicationController
 
   def new
@@ -9,15 +6,28 @@ class GamesController < ApplicationController
   end
 
   def create
-    uri = URI.parse('https://battle.platform45.com/register')
-    http = Net::HTTP.new(uri.host, uri.port)
-    request = Net::HTTP::Get.new(uri.request_uri)
-    response = http.request(request)
-    puts response.body
+    # uri = URI.parse('https://battle.platform45.com/register')
+    # http = Net::HTTP.new(uri.host, uri.port)
+    # request = Net::HTTP::Get.new(uri.request_uri)
+    # response = http.request(request)
+    # puts response.body
 
     redirect_to play_path
   end
 
   def show
+  end
+
+  def update
+    unless current_game
+      game = Game.create(user: current_user)
+      game.board_user = session[:board]
+      session[:game] = game.id
+    end
+
+    current_game.fire!(params[:row].to_i, params[:cell].to_i)
+    current_game.save
+
+    redirect_to play_path
   end
 end
