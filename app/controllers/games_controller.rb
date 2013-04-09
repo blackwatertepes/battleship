@@ -25,9 +25,8 @@ class GamesController < ApplicationController
       session[:game] = game.id
     end
 
-    current_game.fire!(params[:row].to_i, params[:cell].to_i)
+    result = current_game.fire!(params[:row].to_i, params[:cell].to_i)
     current_game.save
-
     redirect_to play_path
   end
 end

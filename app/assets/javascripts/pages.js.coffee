@@ -3,13 +3,13 @@
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 
 $(document).ready ->
-  cell_color = $('.game .cell').css('background')
+  # cell_color = $('.game .cell').css('background')
 
-  $('.game .cell').bind 'mouseover', (e) ->
-    $(this).css('background', '#efe')
+  # $('.game .cell').bind 'mouseover', (e) ->
+  #   $(this).css('background', '#efe')
 
-  $('.game .cell').bind 'mouseout', (e) ->
-    $(this).css('background', cell_color)
+  # $('.game .cell').bind 'mouseout', (e) ->
+  #   $(this).css('background', cell_color)
 
   # $('#start_btn').bind 'click', (e) ->
   #   e.preventDefault()

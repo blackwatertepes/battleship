@@ -13,12 +13,19 @@
     <% @board_user.each do |row| %>
       <div class="row">
         <% row.each do |cell| %>
-          <div class="cell">
-            <% if cell %>
-              <!--<%= "#{cell[:boat][:name][0]} #{cell[:n]}" %>-->
-              <div class="ship <%= boat_classes(cell).join(' ') %>"></div>
-            <% end %>
-          </div>
+          <% if cell == 0 %>
+            <div class="cell miss"></div>
+          <% else %>
+            <div class="cell">
+              <% if cell.class == Hash %>
+                <% if cell[:boat][:boat][cell[:n]] == 1 %>
+                  <div class="ship <%= boat_classes(cell).join(' ') %> hit"></div>
+                <% else %>
+                  <div class="ship <%= boat_classes(cell).join(' ') %>"></div>
+                <% end %>
+              <% end %>
+            </div>
+          <% end %>
         <% end %>
       </div>
     <% end %>
@@ -31,9 +38,13 @@
     <% @board_comp.each_with_index do |row, row_i| %>
       <div class="row">
         <% row.each_with_index do |cell, cell_i| %>
-          <% status = cell && cell[:boat] && cell[:boat][:boat] ? "hit" : "" %>
-          <a href="<%= fire_path row_i, cell_i %>" class="cell <%= status %>">
-          </a>
+          <% if cell.class == Hash && cell[:boat][:boat][cell[:n]] %>
+            <div class="cell hit"></div>
+          <% elsif cell == 0 %>
+            <div class="cell miss"></div>
+          <% else %>
+            <a href="<%= fire_path row_i, cell_i %>" class="cell"></a>
+          <% end %>
         <% end %>
       </div>
     <% end %>

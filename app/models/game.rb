@@ -81,9 +81,33 @@ class Game < ActiveRecord::Base
 
   def fire!(row, cell)
     item = self.board_comp[row][cell]
-    if item && item.class == "Hash"
+    if item && item.class == Hash
       item[:boat][:boat][item[:n]] = 1
-      self.board_comp[row][cell] = item
+      # self.board_comp[row][cell] = item
+    else
+      self.board_comp[row][cell] = 0
     end
+
+    volley!
+  end
+
+  def volley!
+    target = find_targets(self.board_user).sample
+    cell = self.board_user[target[0]][target[1]]
+    if cell && cell.class == Hash
+      cell[:boat][:boat][cell[:n]] = 1
+    else
+      self.board_user[target[0]][target[1]] = 0
+    end
+  end
+
+  def find_targets(board)
+    targets = []
+    board.each_with_index do |row, row_i|
+      row.each_with_index do |cell, cell_i|
+        targets << [row_i, cell_i] unless cell == 0 || cell == 1
+      end
+    end
+    targets
   end
 end

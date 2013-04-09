@@ -126,6 +126,18 @@ $gap: ($cell - $ship) / 2;
       top: $gap;
       left: $gap;
     }
+
+    .ship.hit {
+      background: #A77;
+    }
+  }
+
+  .hit {
+    background: #faa;
+  }
+
+  .miss {
+    background: #afa;
   }
 }
 
