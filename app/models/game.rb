@@ -26,10 +26,10 @@ class Game < ActiveRecord::Base
     [ {name: "Carrier", length: 5},
       {name: "Battleship", length: 4},
       {name: "Destroyer", length: 3},
-      {name: "Submarine", length: 2},
-      {name: "Submarine", length: 2},
-      {name: "Patrol Boat", length: 1},
-      {name: "Patrol Boat", length: 1}].shuffle.each do |boat|
+      {name: "Submarine 1", length: 2},
+      {name: "Submarine 2", length: 2},
+      {name: "Patrol Boat 1", length: 1},
+      {name: "Patrol Boat 2", length: 1}].shuffle.each do |boat|
         self.add_boat(boat, board)
       end
   end
@@ -109,5 +109,45 @@ class Game < ActiveRecord::Base
       end
     end
     targets
+  end
+
+  def sunk_user
+    Hash[*sunk(self.board_user).map{|boat| [boat[:name], boat] }.flatten]
+  end
+
+  def sunk_comp
+    Hash[*sunk(self.board_comp).map{|boat| [boat[:name], boat] }.flatten]
+  end
+
+  def sunk(board)
+    sunk = []
+    board.each do |row|
+      row.each do |cell|
+        if cell.class == Hash && cell[:boat] && !cell[:boat][:boat].include?(nil) && !sunk.include?(cell[:boat])
+          sunk << cell[:boat]
+        end
+      end
+    end
+    sunk
+  end
+
+  def winner_user?
+    floating(self.board_comp).length == 0
+  end
+
+  def winner_comp?
+    floating(self.board_user).length == 0
+  end
+
+  def floating(board)
+    floating = []
+    board.each do |row|
+      row.each do |cell|
+        if cell.class == Hash && cell[:boat] && cell[:boat][:boat].include?(nil) && !floating.include?(cell[:boat])
+          floating << cell[:boat]
+        end
+      end
+    end
+    floating
   end
 end

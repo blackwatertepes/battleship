@@ -12,6 +12,8 @@ class GamesController < ApplicationController
     # response = http.request(request)
     # puts response.body
 
+    session[:game] = nil
+
     redirect_to play_path
   end
 
@@ -21,7 +23,7 @@ class GamesController < ApplicationController
   def update
     unless current_game
       game = Game.create(user: current_user)
-      game.board_user = session[:board]
+      game.update_attribute(:board_user, session[:board])
       session[:game] = game.id
     end
 

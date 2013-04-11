@@ -173,3 +173,9 @@ $gap: ($cell - $ship) / 2;
     text-decoration: none;
   }
 }
+
+.ships {
+  .sunk {
+    text-decoration: line-through;
+  }
+}

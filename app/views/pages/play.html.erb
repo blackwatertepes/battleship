@@ -2,13 +2,14 @@
   <h2><%= current_user.name %></h2>
   <h4><%= current_user.email %></h4>
 
-  <!--<%= link_to "New Game", start_path, class: :btn %>-->
+  <%= link_to "New Game", start_path, class: :btn %>
 
   <%= link_to "Logout", logout_path, class: :logout %>
 </div>
 
-<div class="game">
+<div id="game_user" class="game">
   <h4>You</h4>
+  <h5><%= @winner_user ? "BIG WINNER!!!" : "" %></h5>
   <div class="board">
     <% @board_user.each do |row| %>
       <div class="row">
@@ -30,10 +31,21 @@
       </div>
     <% end %>
   </div>
+  <h5>Ships</h5>
+  <ul class="ships">
+    <li class="carrier <%= @sunk_user.include?("Carrier") ? "sunk" : "" %>"><span>Carrier</span></li>
+    <li class="battleship <%= @sunk_user.include?("Battleship") ? "sunk" : "" %>"><span>Battleship</span></li>
+    <li class="destroyer <%= @sunk_user.include?("Destroyer") ? "sunk" : "" %>"><span>Destroyer</span></li>
+    <li class="submarine <%= @sunk_user.include?("Submarine 1") ? "sunk" : "" %>"><span>Submarine</span></li>
+    <li class="submarine <%= @sunk_user.include?("Submarine 2") ? "sunk" : "" %>"><span>Submarine</span></li>
+    <li class="patrol <%= @sunk_user.include?("Patrol Boat 1") ? "sunk" : "" %>"><span>Patrol Boat</span></li>
+    <li class="patrol <%= @sunk_user.include?("Patrol Boat 2") ? "sunk" : "" %>"><span>Patrol Boat</span></li>
+  </ul>
 </div>
 
-<div class="game">
+<div id="game_comp" class="game">
   <h4>Opponent</h4>
+  <h5><%= @winner_comp ? "BIG WINNER!!!" : "" %></h5>
   <div class="board">
     <% @board_comp.each_with_index do |row, row_i| %>
       <div class="row">
@@ -49,4 +61,14 @@
       </div>
     <% end %>
   </div>
+  <h5>Ships</h5>
+  <ul class="ships">
+    <li class="carrier <%= @sunk_comp.include?("Carrier") ? "sunk" : "" %>"><span>Carrier</span></li>
+    <li class="battleship <%= @sunk_comp.include?("Battleship") ? "sunk" : "" %>"><span>Battleship</span></li>
+    <li class="destroyer <%= @sunk_comp.include?("Destroyer") ? "sunk" : "" %>"><span>Destroyer</span></li>
+    <li class="submarine <%= @sunk_comp.include?("Submarine 1") ? "sunk" : "" %>"><span>Submarine</span></li>
+    <li class="submarine <%= @sunk_comp.include?("Submarine 2") ? "sunk" : "" %>"><span>Submarine</span></li>
+    <li class="patrol <%= @sunk_comp.include?("Patrol Boat 1") ? "sunk" : "" %>"><span>Patrol Boat</span></li>
+    <li class="patrol <%= @sunk_comp.include?("Patrol Boat 2") ? "sunk" : "" %>"><span>Patrol Boat</span></li>
+  </ul>
 </div>
