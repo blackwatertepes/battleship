@@ -17,8 +17,8 @@ class PagesController < ApplicationController
 
     @board_user = @game.board_user
     @board_comp = @game.board_comp
-    @sunk_user = @game.sunk_user
-    @sunk_comp = @game.sunk_comp
+    @sunk_user = @game.board_user.sunk
+    @sunk_comp = @game.board_comp.sunk
     @winner_user = @game.winner_user?
     @winner_comp = @game.winner_comp?
   end

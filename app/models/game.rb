@@ -4,58 +4,59 @@ class Game < ActiveRecord::Base
   serialize :board_user
   serialize :board_comp
 
+  validates_presence_of :user
+
   belongs_to :user
 
   after_initialize :new_boards
 
   def new_boards
-    self.board_user = new_board unless self.board_user
-    self.board_comp = new_board unless self.board_comp
+    self.board_user = new_board unless board_user && board_user.length > 0
+    self.board_comp = new_board unless board_comp && board_comp.length > 0
   end
 
   def new_board
-    board = []
-    Array.new(100).each_slice(10) do |slice|
-      board << slice
-    end
-    self.add_boats(board)
-    board
+    board = Board.new
+    Array.new(100).map{|n| Unit.new }.each_slice(10) { |slice| board << slice }
+    self.add_ships!(board)
   end
   
-  def add_boats(board)
-    [ {name: "Carrier", length: 5},
-      {name: "Battleship", length: 4},
-      {name: "Destroyer", length: 3},
-      {name: "Submarine 1", length: 2},
-      {name: "Submarine 2", length: 2},
-      {name: "Patrol Boat 1", length: 1},
-      {name: "Patrol Boat 2", length: 1}].shuffle.each do |boat|
-        self.add_boat(boat, board)
+  def add_ships!(board)
+    [ Ship.new("Carrier", 5),
+      Ship.new("Battleship", 4),
+      Ship.new("Destroyer", 3),
+      Ship.new("Submarine 1", 2),
+      Ship.new("Submarine 2", 2),
+      Ship.new("Patrol Boat 1", 1),
+      Ship.new("Patrol Boat 2", 1)].shuffle.each do |ship|
+        self.add_ship!(ship, board)
       end
+    board
   end
 
-  def add_boat(boat, board)
-    boat[:boat] = Array.new(boat[:length])
-    row_i, cell_i, dir = self.find_gaps(boat[:length] + 2, board).sample
+  def add_ship!(ship, board)
+    row_i, cell_i, dir = gaps(ship.length + 2, board).sample
     
-    boat[:length].times do |n|
+    ship.length.times do |n|
+      cell_index = cell_i + 1 + n
+      unit = Unit.new({ship: ship, n: n, dir: dir, cell: cell_index, row: row_i})
       if dir == 'right'
-        board[row_i][cell_i + 1 + n] = {boat: boat, n: n, dir: dir}
+        board[row_i][cell_index] = unit
       else
-        board[cell_i + 1 + n][row_i] = {boat: boat, n: n, dir: dir}
+        board[cell_index][row_i] = unit
       end
     end
   end
 
-  def find_gaps(width, board)
-    gaps = []
+  def gaps(width, board)
+    set = []
     board.each_with_index do |row, row_i|
       len = 0
       row.each_with_index do |cell, cell_i|
         len += 1
-        if cell == nil
+        if !cell.ship?
           if len >= width
-            gaps << [row_i, cell_i - width + 1, 'right']
+            set << [row_i, cell_i - width + 1, 'right']
           end
         else
           len = 0
@@ -67,87 +68,168 @@ class Game < ActiveRecord::Base
       len = 0
       row.each_with_index do |cell, cell_i|
         len += 1
-        if cell == nil
+        if !cell.ship?
           if len >= width
-            gaps << [row_i, cell_i - width + 1, 'down']
+            set << [row_i, cell_i - width + 1, 'down']
           end
         else
           len = 0
         end
       end
     end
-    gaps
+    set
   end
 
   def fire!(row, cell)
-    item = self.board_comp[row][cell]
-    if item && item.class == Hash
-      item[:boat][:boat][item[:n]] = 1
-      # self.board_comp[row][cell] = item
-    else
-      self.board_comp[row][cell] = 0
-    end
-
+    self.board_comp[row][cell].hit!
     volley!
   end
 
   def volley!
-    target = find_targets(self.board_user).sample
+    target = board_user.targets.sample
     cell = self.board_user[target[0]][target[1]]
-    if cell && cell.class == Hash
-      cell[:boat][:boat][cell[:n]] = 1
-    else
-      self.board_user[target[0]][target[1]] = 0
-    end
+    cell.hit!
   end
 
-  def find_targets(board)
+  def winner_user?
+    self.board_comp.clear?
+  end
+
+  def winner_comp?
+    self.board_user.clear?
+  end
+end
+
+class Board < Array
+  def injured
+    floating.select{|ship| ship.injured? }
+  end
+
+  def ships
+    fleet = []
+    shiped_spaces.each do |space|
+      fleet << space.ship unless fleet.include?(space.ship)
+    end
+    fleet
+  end
+
+  def spaces_by_ship(ship)
+    shiped_spaces.select{|unit| unit.ship == ship }
+  end
+
+  def shiped_spaces
     targets = []
-    board.each_with_index do |row, row_i|
+    self.each_with_index do |row, row_i|
       row.each_with_index do |cell, cell_i|
-        targets << [row_i, cell_i] unless cell == 0 || cell == 1
+        targets << cell if cell.ship?
       end
     end
     targets
   end
 
-  def sunk_user
-    Hash[*sunk(self.board_user).map{|boat| [boat[:name], boat] }.flatten]
-  end
-
-  def sunk_comp
-    Hash[*sunk(self.board_comp).map{|boat| [boat[:name], boat] }.flatten]
-  end
-
-  def sunk(board)
-    sunk = []
-    board.each do |row|
-      row.each do |cell|
-        if cell.class == Hash && cell[:boat] && !cell[:boat][:boat].include?(nil) && !sunk.include?(cell[:boat])
-          sunk << cell[:boat]
-        end
+  def hits
+    set = []
+    self.each_with_index do |row, row_i|
+      row.each_with_index do |cell, cell_i|
+        set << [row_i, cell_i] if cell.hit?
       end
     end
-    sunk
+    set
   end
 
-  def winner_user?
-    floating(self.board_comp).length == 0
-  end
-
-  def winner_comp?
-    floating(self.board_user).length == 0
-  end
-
-  def floating(board)
-    floating = []
-    board.each do |row|
-      row.each do |cell|
-        if cell.class == Hash && cell[:boat] && cell[:boat][:boat].include?(nil) && !floating.include?(cell[:boat])
-          floating << cell[:boat]
-        end
+  def positive_targets
+    targets = []
+    self.each_with_index do |row, row_i|
+      row.each_with_index do |cell, cell_i|
+        targets << [row_i, cell_i] if cell.ship? && !cell.hit?
       end
     end
-    floating
+    targets
+  end
+
+  def negative_targets
+    targets = []
+    self.each_with_index do |row, row_i|
+      row.each_with_index do |cell, cell_i|
+        targets << [row_i, cell_i] unless cell.ship? || cell.hit?
+      end
+    end
+    targets
+  end
+
+  def targets
+    set = []
+    self.each_with_index do |row, row_i|
+      row.each_with_index do |cell, cell_i|
+        set << [row_i, cell_i] unless cell.hit?
+      end
+    end
+    set
+  end
+
+  def clear?
+    floating.length == 0
+  end
+
+  def floating
+    ships.reject{ |ship| sunk?(ship) }
+  end
+
+  def sunk
+    ships.select{ |ship| sunk?(ship) }
+  end
+
+  def sunk?(ship)
+    !ship.body.include?(nil)
+  end
+
+  def boat?(item)
+    item.class == Unit
+  end
+end
+
+class Unit
+  attr_reader :ship, :n, :dir, :cell, :row
+
+  def initialize(params = nil)
+    if params
+      @ship = params[:ship]
+      @n = params[:n]
+      @dir = params[:dir]
+      @cell = params[:cell]
+      @row = params[:row]
+    end
+  end
+
+  def hit!
+    if ship?
+      @ship.body[@n] = 1
+    else
+      @ship = 1
+    end
+  end
+
+  def hit?
+    return @ship.body[@n] == 1 if ship?
+    return @ship == 1
+  end
+
+  def ship?
+    @ship.class == Ship
+  end
+end
+
+class Ship
+  attr_reader :name, :length
+  attr_accessor :body
+
+  def initialize(name, length)
+    @name = name
+    @length = length
+    @body = Array.new(length)
+  end
+
+  def injured?
+    @body.include?(1)
   end
 end
