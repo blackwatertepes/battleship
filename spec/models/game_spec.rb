@@ -44,12 +44,6 @@ describe Game do
   context "when a user fires" do
 
     context "and hits" do
-      before(:each) do
-        game = build(:game)
-        comp = game.board_comp
-        shiped = comp.shiped_spaces
-        ships = comp.ships
-      end
 
       it "should register a hit" do
         row, cell = comp.positive_targets.sample
@@ -70,10 +64,6 @@ describe Game do
     end
 
     context "and misses" do
-      before(:each) do
-        game = build(:game)
-        comp = game.board_comp
-      end
 
       it "should register a miss" do
         row, cell = comp.negative_targets.sample
