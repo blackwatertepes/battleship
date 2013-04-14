@@ -44,45 +44,38 @@ describe Game do
   context "when a user fires" do
 
     context "and hits" do
+      before(:each) do
+        game = build(:game)
+        comp = game.board_comp
+        shiped = comp.shiped_spaces
+        ships = comp.ships
+      end
 
       it "should register a hit" do
-        game = build(:game)
-        row, cell = game.board_comp.positive_targets.sample
+        row, cell = comp.positive_targets.sample
         game.fire!(row, cell)
-        ship = game.board_comp[row][cell].ship
+        ship = comp[row][cell].ship
         ship.body.should include 1
       end
 
-      context "and sinks a ship" do
+      xit "should register a sunk ship" do
+        expect{ comp.spaces_by_ship(ships.first).each { |space| game.fire!(space.row, space.cell) } }
+        .to change{ comp.sunk.length }.by(1)
+      end
 
-        it "should register a sunk ship" do
-          game = build(:game)
-          comp = game.board_comp
-          shiped = comp.shiped_spaces
-          ships = comp.ships
-          expect{ comp.spaces_by_ship(ships.first).each { |space| game.fire!(space.row, space.cell) } }
-          .to change{ comp.sunk.length }.by(1)
-        end
-
-        context "and sinks every ship" do
-
-          xit "should regsiter a winner" do
-            game = build(:game)
-            comp = game.board_comp
-            shiped = comp.shiped_spaces
-            ships = comp.ships
-            expect{ shiped.each { |space| game.fire!(space.row, space.cell) } }
-            .to change{ game.winner_user? }.from(false).to(true)
-          end
-        end
+      xit "should regsiter a winner" do
+        expect{ shiped.each { |space| game.fire!(space.row, space.cell) } }
+        .to change{ game.winner_user? }.from(false).to(true)
       end
     end
 
     context "and misses" do
-
-      it "should register a miss" do
+      before(:each) do
         game = build(:game)
         comp = game.board_comp
+      end
+
+      it "should register a miss" do
         row, cell = comp.negative_targets.sample
         game.fire!(row, cell)
         comp[row][cell].hit?.should be_true
@@ -91,13 +84,11 @@ describe Game do
     end
 
     it "should return a fire from the comp" do
-      game = build(:game)
       expect { game.fire!(rand(10), rand(10)) }
       .to change{ game.board_user.hits.length }.by(1)
     end
 
     it "should return a win from the comp" do
-      game = build(:game)
       expect { 10.times {|a| 10.times {|b| game.fire!(a, b) } } }
       .to change{ game.winner_comp? }.from(false).to(true)
     end
