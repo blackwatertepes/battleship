@@ -12,7 +12,7 @@ class PagesController < ApplicationController
       @game = current_game
     else
       @game = Game.new
-      session[:board] = @game.board_user
+      session[:board] = Marshal::dump(@game.board_user)
     end
 
     @board_user = @game.board_user

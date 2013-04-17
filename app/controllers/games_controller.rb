@@ -23,7 +23,7 @@ class GamesController < ApplicationController
   def update
     unless current_game
       game = Game.create(user: current_user)
-      game.update_attribute(:board_user, session[:board])
+      game.update_attribute(:board_user, Marshal::load(session[:board]))
       session[:game] = game.id
     end
 
