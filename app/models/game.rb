@@ -16,8 +16,15 @@ class Game < ActiveRecord::Base
   end
 
   def new_board
-    board = Board.new
-    Array.new(100).map{|n| Unit.new }.each_slice(10) { |slice| board << slice }
+    board_size = 10
+    board = Board.new(board_size)
+    Array.new(board_size**2).map{|n| Unit.new }.each_slice(board_size) { |slice| board << slice }
+    board.each_with_index do |row, row_i|
+      row.each_with_index do |cell, cell_i|
+        cell.row = row_i
+        cell.cell = cell_i
+      end
+    end
     self.add_ships!(board)
   end
   
@@ -88,9 +95,7 @@ class Game < ActiveRecord::Base
   end
 
   def volley!
-    target = board_user.targets.sample
-    cell = self.board_user[target[0]][target[1]]
-    cell.hit!
+    board_user.targets.sample.hit!
   end
 
   def winner_user?
@@ -103,6 +108,12 @@ class Game < ActiveRecord::Base
 end
 
 class Board < Array
+  attr_reader :board_size
+
+  def initialize(size)
+    @board_size = size
+  end
+
   def injured
     floating.select{|ship| ship.injured? }
   end
@@ -120,50 +131,93 @@ class Board < Array
   end
 
   def shiped_spaces
-    targets = []
+    set = []
     self.each_with_index do |row, row_i|
       row.each_with_index do |cell, cell_i|
-        targets << cell if cell.ship?
+        set << cell if cell.ship?
       end
     end
-    targets
+    set
   end
 
   def hits
     set = []
     self.each_with_index do |row, row_i|
       row.each_with_index do |cell, cell_i|
-        set << [row_i, cell_i] if cell.hit?
+        set << cell if cell.hit?
       end
     end
     set
   end
 
   def positive_targets
-    targets = []
-    self.each_with_index do |row, row_i|
-      row.each_with_index do |cell, cell_i|
-        targets << [row_i, cell_i] if cell.ship? && !cell.hit?
-      end
-    end
-    targets
-  end
-
-  def negative_targets
-    targets = []
-    self.each_with_index do |row, row_i|
-      row.each_with_index do |cell, cell_i|
-        targets << [row_i, cell_i] unless cell.ship? || cell.hit?
-      end
-    end
-    targets
-  end
-
-  def targets
     set = []
     self.each_with_index do |row, row_i|
       row.each_with_index do |cell, cell_i|
-        set << [row_i, cell_i] unless cell.hit?
+        set << cell if cell.ship? && !cell.hit?
+      end
+    end
+    set
+  end
+
+  def negative_targets
+    set = []
+    self.each_with_index do |row, row_i|
+      row.each_with_index do |cell, cell_i|
+        set << cell unless cell.ship? || cell.hit?
+      end
+    end
+    set
+  end
+
+  def neighbors(ship)
+    set = []
+    if ship.hits > 1
+      spaces_by_ship(ship).each do |cell|
+        if cell.hit?
+          if cell.dir == 'right'
+            target = self[cell.row][cell.cell + 1]
+            set << target if cell.cell < @board_size - 1 && !target.hit?
+            target = self[cell.row][cell.cell - 1]
+            set << target if cell.cell > 0 && !target.hit?
+          else
+            target = self[cell.row + 1][cell.cell]
+            set << target if cell.row < @board_size - 1 && !target.hit?
+            target = self[cell.row - 1][cell.cell]
+            set << target if cell.row > 0 && !target.hit?
+          end
+        end
+      end
+    else
+      spaces_by_ship(ship).each do |cell|
+        if cell.hit?
+          target = self[cell.row + 1][cell.cell]
+          set << target if cell.row < @board_size - 1 && !target.hit?
+          target = self[cell.row - 1][cell.cell]
+          set << target if cell.row > 0 && !target.hit?
+          target = self[cell.row][cell.cell + 1]
+          set << target if cell.cell < @board_size - 1 && !target.hit?
+          target = self[cell.row][cell.cell - 1]
+          set << target if cell.cell > 0 && !target.hit?
+        end
+      end
+    end
+    set
+  end
+
+  def targets
+    unless injured.empty?
+      return neighbors(injured.sample)
+    else
+      return unhit
+    end
+  end
+
+  def unhit
+    set = []
+    self.each_with_index do |row, row_i|
+      row.each_with_index do |cell, cell_i|
+        set << cell unless cell.hit?
       end
     end
     set
@@ -182,7 +236,7 @@ class Board < Array
   end
 
   def sunk?(ship)
-    !ship.body.include?(nil)
+    ship.sunk?
   end
 
   def boat?(item)
@@ -191,7 +245,7 @@ class Board < Array
 end
 
 class Unit
-  attr_reader :ship, :n, :dir, :cell, :row
+  attr_accessor :ship, :n, :dir, :cell, :row
 
   def initialize(params = nil)
     if params
@@ -232,6 +286,14 @@ class Ship
   end
 
   def injured?
-    @body.include?(1)
+    hits > 0
+  end
+
+  def hits
+    @body.count(1)
+  end
+
+  def sunk?
+    hits == @length
   end
 end

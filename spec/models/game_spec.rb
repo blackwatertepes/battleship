@@ -43,13 +43,36 @@ describe Game do
 
   context "when a user fires" do
 
-    context "and hits" do
+    it "should change the amount of hit space on the user board" do
+      expect{ game.fire!(0, 0) }
+      .to change{ user.unhit.length }.by(-1)
+    end
 
-      it "should register a hit" do
-        row, cell = comp.positive_targets.sample
-        game.fire!(row, cell)
-        ship = comp[row][cell].ship
-        ship.body.should include 1
+    it "should change the amount of hit spaces on the comp board" do
+      expect{ game.fire!(0, 0) }
+      .to change{ comp.unhit.length }.by(-1)
+    end
+
+    it "should mark the space as hit" do
+      target = comp.targets.sample
+      expect{ game.fire!(target.row, target.cell) }
+      .to change{ target.hit? }.from(false).to(true)
+    end
+
+    context "and hits" do
+      before(:each) do
+        @target = comp.positive_targets.sample
+        @ship = comp[@target.row][@target.cell].ship
+      end
+
+      it "should injure the ship" do
+        expect{ game.fire!(@target.row, @target.cell) }
+        .to change{ @ship.injured? }.from(false).to(true)
+      end
+
+      it "should add another hit to the ship" do
+        expect{ game.fire!(@target.row, @target.cell) }
+        .to change{ @ship.hits }.by(1)
       end
 
       it "should register a sunk ship" do
@@ -61,15 +84,20 @@ describe Game do
         expect{ comp.shiped_spaces.each { |space| game.fire!(space.row, space.cell) } }
         .to change{ game.winner_user? }.from(false).to(true)
       end
+
+      it "should target the hit ship" do
+        game.fire!(@target.row, @target.cell)
+        comp.targets.length.should <= 4
+      end
     end
 
     context "and misses" do
 
       it "should register a miss" do
-        row, cell = comp.negative_targets.sample
-        game.fire!(row, cell)
-        comp[row][cell].hit?.should be_true
-        comp[row][cell].ship?.should_not be_true
+        target = comp.negative_targets.sample
+        game.fire!(target.row, target.cell)
+        target.hit?.should be_true
+        target.ship?.should_not be_true
       end
     end
 
