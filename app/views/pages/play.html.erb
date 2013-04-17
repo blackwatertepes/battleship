@@ -14,7 +14,7 @@
     <% @board_user.each do |row| %>
       <div class="row">
         <% row.each do |cell| %>
-          <% if cell == 0 %>
+          <% if cell.hit? && !cell.ship? %>
             <div class="cell miss"></div>
           <% else %>
             <div class="cell">
@@ -50,9 +50,9 @@
     <% @board_comp.each_with_index do |row, row_i| %>
       <div class="row">
         <% row.each_with_index do |cell, cell_i| %>
-          <% if cell.class == Unit && cell.hit? %>
+          <% if cell.ship? && cell.hit? %>
             <div class="cell hit"></div>
-          <% elsif cell == 0 %>
+          <% elsif cell.hit? %>
             <div class="cell miss"></div>
           <% else %>
             <a href="<%= fire_path row_i, cell_i %>" class="cell"></a>
