@@ -52,13 +52,13 @@ describe Game do
         ship.body.should include 1
       end
 
-      xit "should register a sunk ship" do
-        expect{ comp.spaces_by_ship(ships.first).each { |space| game.fire!(space.row, space.cell) } }
+      it "should register a sunk ship" do
+        expect{ comp.spaces_by_ship(comp.ships.first).each { |space| game.fire!(space.row, space.cell) } }
         .to change{ comp.sunk.length }.by(1)
       end
 
-      xit "should regsiter a winner" do
-        expect{ shiped.each { |space| game.fire!(space.row, space.cell) } }
+      it "should register a winner" do
+        expect{ comp.shiped_spaces.each { |space| game.fire!(space.row, space.cell) } }
         .to change{ game.winner_user? }.from(false).to(true)
       end
     end

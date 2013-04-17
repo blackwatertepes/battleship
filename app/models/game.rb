@@ -36,15 +36,17 @@ class Game < ActiveRecord::Base
 
   def add_ship!(ship, board)
     row_i, cell_i, dir = gaps(ship.length + 2, board).sample
+    row_index = row_i
+    cell_index = cell_i
     
     ship.length.times do |n|
-      cell_index = cell_i + 1 + n
-      unit = Unit.new({ship: ship, n: n, dir: dir, cell: cell_index, row: row_i})
       if dir == 'right'
-        board[row_i][cell_index] = unit
+        cell_index = cell_i + 1 + n
       else
-        board[cell_index][row_i] = unit
+        row_index = row_i + 1 + n
       end
+      unit = Unit.new({ship: ship, n: n, dir: dir, cell: cell_index, row: row_index})
+      board[row_index][cell_index] = unit
     end
   end
 
@@ -70,7 +72,7 @@ class Game < ActiveRecord::Base
         len += 1
         if !cell.ship?
           if len >= width
-            set << [row_i, cell_i - width + 1, 'down']
+            set << [cell_i - width + 1, row_i, 'down']
           end
         else
           len = 0
