@@ -18,7 +18,7 @@
             <div class="cell miss"></div>
           <% else %>
             <div class="cell">
-              <% if cell.class == Unit %>
+              <% if cell.ship? %>
                 <% if cell.hit? %>
                   <div class="ship <%= boat_classes(cell).join(' ') %> hit"></div>
                 <% else %>
