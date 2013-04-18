@@ -1,28 +1,33 @@
-# require 'spec_helper'
+require 'spec_helper'
 
-# feature "A player without a game in progess" do
-#   before(:all) do
-#     user = create(:user)
-#     sign_up_with(user.name, user.email)
-#   end
+feature "A player on the play page" do
+  before(:each) do
+    user = build(:user)
+    sign_up_with(user.name, user.email)
+  end
 
-#   # scenario "should refresh to see a new game" do
-#   #   click_link "New Game"
-#   #   expect(page.has_css?(".hit")).to be_false
-#   #   expect(page.has_css?(".miss")).to be_false
-#   # end
-# end
+  scenario "should be able to start a new game" do
+    click_link "New Game"
+    expect(page).to_not have_css('.hit')
+    expect(page).to_not have_css('.miss')
+  end
 
-# feature "A player with a game in progress" do
-#   # before(:all) do
-#   #   user = create(:user)
-#   #   sign_up_with(user.name, user.email)
-#   # end
-# end
+  scenario "should be able to change their name/email" do
+    pending("edit works in dev, but not in test")
+    new_user = build(:user)
+    click_link "Edit"
+    fill_in "user_name", with: new_user.name
+    fill_in "user_email", with: new_user.email
+    click_button "Update"
+    current_path.should eq play_path
+    expect(page).to have_content(new_user.name)
+    expect(page).to have_content(new_user.email)
+  end
+end
 
-# def sign_up_with(name, email)
-#   visit root_path
-#   fill_in "user_name", with: name
-#   fill_in "user_email", with: email
-#   click_button "Play"
-# end
+def sign_up_with(name, email)
+  visit root_path
+  fill_in "user_name", with: name
+  fill_in "user_email", with: email
+  click_button "Play"
+end
