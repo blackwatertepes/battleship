@@ -176,29 +176,45 @@ class Board < Array
       spaces_by_ship(ship).each do |cell|
         if cell.hit?
           if cell.dir == 'right'
-            target = self[cell.row][cell.cell + 1]
-            set << target if cell.cell < @board_size - 1 && !target.hit?
-            target = self[cell.row][cell.cell - 1]
-            set << target if cell.cell > 0 && !target.hit?
+            if cell.cell < @board_size - 1
+              target = self[cell.row][cell.cell + 1]
+              set << target if !target.hit?
+            end
+            if cell.cell > 0
+              target = self[cell.row][cell.cell - 1]
+              set << target if !target.hit?
+            end
           else
-            target = self[cell.row + 1][cell.cell]
-            set << target if cell.row < @board_size - 1 && !target.hit?
-            target = self[cell.row - 1][cell.cell]
-            set << target if cell.row > 0 && !target.hit?
+            if cell.row < @board_size - 1
+              target = self[cell.row + 1][cell.cell]
+              set << target if !target.hit?
+            end
+            if cell.row > 0
+              target = self[cell.row - 1][cell.cell]
+              set << target if !target.hit?
+            end
           end
         end
       end
     else
       spaces_by_ship(ship).each do |cell|
         if cell.hit?
-          target = self[cell.row + 1][cell.cell]
-          set << target if cell.row < @board_size - 1 && !target.hit?
-          target = self[cell.row - 1][cell.cell]
-          set << target if cell.row > 0 && !target.hit?
-          target = self[cell.row][cell.cell + 1]
-          set << target if cell.cell < @board_size - 1 && !target.hit?
-          target = self[cell.row][cell.cell - 1]
-          set << target if cell.cell > 0 && !target.hit?
+          if cell.row < @board_size - 1
+            target = self[cell.row + 1][cell.cell]
+            set << target if !target.hit?
+          end
+          if cell.row > 0
+            target = self[cell.row - 1][cell.cell]
+            set << target if !target.hit?
+          end
+          if cell.cell < @board_size - 1
+            target = self[cell.row][cell.cell + 1]
+            set << target if !target.hit?
+          end
+          if cell.cell > 0
+            target = self[cell.row][cell.cell - 1]
+            set << target if !target.hit?
+          end
         end
       end
     end
