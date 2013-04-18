@@ -17,10 +17,9 @@ class PagesController < ApplicationController
 
     @board_user = @game.board_user
     @board_comp = @game.board_comp
-    @sunk_user = @game.board_user.sunk
-    @sunk_comp = @game.board_comp.sunk
-    @winner_user = @game.winner_user?
-    @winner_comp = @game.winner_comp?
+    @sunk_user = @game.board_user.sunk.map{|ship| ship.name }
+    @sunk_comp = @game.board_comp.sunk.map{|ship| ship.name }
+    @win_message = @game.win_message
   end
 
   def logout

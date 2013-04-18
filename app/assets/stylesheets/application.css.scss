@@ -54,10 +54,35 @@ form {
   }
 }
 
+.win {
+  background: rgba(255, 255, 255, .6);
+  position: absolute;
+  z-index: 1;
+  width: 900px;
+  text-decoration: center;
+  height: 480px;
+
+  h1 {
+    background: rgba(255,255,255,.8);
+    position: absolute;
+    top: 160px;
+    width: 800px;
+    left: 50px;
+    line-height: 100px;
+    border-radius: 10px;
+    text-align: center;
+  }
+}
+
 .game {
   display: inline-block;
   margin-bottom: 30px;
   margin-right: 25px;
+  width: 420px;
+
+  h4 {
+    margin: 5px;
+  }
 }
 
 $board: 420px;
@@ -143,14 +168,22 @@ $gap: ($cell - $ship) / 2;
 
 .panel {
   position: relative;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 
-  h2, h4 {
-    margin: 0;
+  .user_info {
+
+    h2, h4 {
+      margin: 0;
+    }
+
+    a {
+      font-size: 12px;
+    }
   }
 
   a {
     text-decoration: none;
+    color: #ccc;
   }
 
   a.btn {
@@ -165,17 +198,37 @@ $gap: ($cell - $ship) / 2;
     color: #fff;
   }
 
-  .logout {
+  .links {
     position: absolute;
     top: 0px;
     right: 0px;
     color: #ccc;
-    text-decoration: none;
+
+    .highlight {
+      color: #666;
+    }
   }
 }
 
 .ships {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  font-size: 11px;
+
   .sunk {
     text-decoration: line-through;
+  }
+
+  li {
+    display: inline;
+  }
+
+  li:after {
+    content: ", ";
+  }
+
+  li:last-child:after {
+    content: "";
   }
 }

@@ -1,15 +1,24 @@
 <div class="panel">
-  <h2><%= current_user.name %></h2>
-  <h4><%= current_user.email %></h4>
+  <div class="user_info">
+    <h2><%= current_user.name %></h2>
+    <h4><%= current_user.email %></h4>
+    <%= link_to "Edit", edit_user_path(current_user) %>
+  </div>
 
-  <%= link_to "New Game", start_path, class: :btn %>
-
-  <%= link_to "Logout", logout_path, class: :logout %>
+  <div class="links">
+    <%= link_to "New Game", start_path, class: "new_game #{@win_message ? "highlight" : ""}" %>&nbsp;&nbsp;|&nbsp;&nbsp;
+    <%= link_to "Logout", logout_path, class: :logout %>
+  </div>
 </div>
+
+<% if @win_message %>
+  <div class="win">
+    <h1><%= @win_message %></h1>
+  </div>
+<% end %>
 
 <div id="game_user" class="game">
   <h4>You</h4>
-  <h5><%= @winner_user ? "BIG WINNER!!!" : "" %></h5>
   <div class="board">
     <% @board_user.each do |row| %>
       <div class="row">
@@ -31,7 +40,6 @@
       </div>
     <% end %>
   </div>
-  <h5>Ships</h5>
   <ul class="ships">
     <li class="carrier <%= @sunk_user.include?("Carrier") ? "sunk" : "" %>"><span>Carrier</span></li>
     <li class="battleship <%= @sunk_user.include?("Battleship") ? "sunk" : "" %>"><span>Battleship</span></li>
@@ -45,7 +53,6 @@
 
 <div id="game_comp" class="game">
   <h4>Opponent</h4>
-  <h5><%= @winner_comp ? "BIG WINNER!!!" : "" %></h5>
   <div class="board">
     <% @board_comp.each_with_index do |row, row_i| %>
       <div class="row">
@@ -61,7 +68,6 @@
       </div>
     <% end %>
   </div>
-  <h5>Ships</h5>
   <ul class="ships">
     <li class="carrier <%= @sunk_comp.include?("Carrier") ? "sunk" : "" %>"><span>Carrier</span></li>
     <li class="battleship <%= @sunk_comp.include?("Battleship") ? "sunk" : "" %>"><span>Battleship</span></li>

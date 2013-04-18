@@ -105,6 +105,11 @@ class Game < ActiveRecord::Base
   def winner_comp?
     self.board_user.clear?
   end
+
+  def win_message
+    return "Congrats! You've beaten the computer." if winner_user?
+    return "Ooooh. You lost to a machine." if winner_comp?
+  end
 end
 
 class Board < Array
@@ -244,19 +249,11 @@ class Board < Array
   end
 
   def floating
-    ships.reject{ |ship| sunk?(ship) }
+    ships.reject{ |ship| ship.sunk? }
   end
 
   def sunk
-    ships.select{ |ship| sunk?(ship) }
-  end
-
-  def sunk?(ship)
-    ship.sunk?
-  end
-
-  def boat?(item)
-    item.class == Unit
+    ships.select{ |ship| ship.sunk? }
   end
 end
 
