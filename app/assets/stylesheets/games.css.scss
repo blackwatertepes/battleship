@@ -1,3 +1,178 @@
-// Place all the styles related to the Games controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
+.win {
+  background: rgba(255, 255, 255, .6);
+  position: absolute;
+  z-index: 1;
+  width: 900px;
+  text-decoration: center;
+  height: 480px;
+
+  h1 {
+    background: rgba(255,255,255,.8);
+    position: absolute;
+    top: 160px;
+    width: 800px;
+    left: 50px;
+    line-height: 100px;
+    border-radius: 10px;
+    text-align: center;
+  }
+}
+
+.game {
+  display: inline-block;
+  margin-bottom: 30px;
+  margin-right: 25px;
+  width: 420px;
+
+  h4 {
+    margin: 5px;
+  }
+}
+
+$board: 420px;
+$cell: $board / 10 - 2;
+$ship: $cell - 4;
+$gap: ($cell - $ship) / 2;
+
+.board {
+  width: $board;
+  height: $board;
+  background: #ccc;
+  border: 3px solid #999;
+  padding: 2px;
+  display: table;
+
+  .cell {
+    float: left;
+    background: #eef;
+    width: $cell;
+    height: $cell;
+    border: 1px solid #999;
+    cursor: pointer;
+    position: relative;
+
+    .ship {
+      width: $ship;
+      height: $ship;
+      background: #789;
+      position: absolute;
+      display: block;
+    }
+
+    .ship.down {
+      height: 100%;
+      left: $gap;
+    }
+
+    .ship.right {
+      width: 100%;
+      top: $gap;
+    }
+
+    .ship.down.front {
+      height: $ship;
+      bottom: 0px;
+    }
+
+    .ship.down.back {
+      height: $ship;
+      top: 0px;
+    }
+
+    .ship.right.front {
+      width: $ship;
+      right: 0px;
+    }
+
+    .ship.right.back {
+      width: $ship;
+      left: 0px;
+    }
+
+    .ship.tiny {
+      width: $ship;
+      height: $ship;
+      top: $gap;
+      left: $gap;
+    }
+
+    .ship.hit {
+      background: #A77;
+    }
+  }
+
+  .hit {
+    background: #faa;
+  }
+
+  .miss {
+    background: #afa;
+  }
+}
+
+.panel {
+  position: relative;
+  margin-bottom: 20px;
+
+  .user_info {
+
+    h2, h4 {
+      margin: 0;
+    }
+
+    a {
+      font-size: 12px;
+    }
+  }
+
+  a {
+    text-decoration: none;
+    color: #ccc;
+  }
+
+  a.btn {
+    display: block;
+    text-align: center;
+    width: 100px;
+    line-height: 30px;
+    margin: 10px auto;
+    background: #ddd;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    color: #fff;
+  }
+
+  .links {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    color: #ccc;
+
+    .highlight {
+      color: #666;
+    }
+  }
+}
+
+.ships {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  font-size: 11px;
+
+  .sunk {
+    text-decoration: line-through;
+  }
+
+  li {
+    display: inline;
+  }
+
+  li:after {
+    content: ", ";
+  }
+
+  li:last-child:after {
+    content: "";
+  }
+}
