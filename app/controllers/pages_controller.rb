@@ -23,7 +23,7 @@ class PagesController < ApplicationController
   end
 
   def logout
-    session[:email] = nil
+    session[:id] = nil
 
     redirect_to root_path                                                                                                                                         
   end

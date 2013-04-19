@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
   private
 
   def current_user
-    @current_user ||= User.find_by_email(session[:email]) if session[:email]
+    @current_user ||= User.find(session[:id]) if session[:id]
   end
 
   def current_game

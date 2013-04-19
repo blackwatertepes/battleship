@@ -13,7 +13,6 @@ feature "A player on the play page" do
   end
 
   scenario "should be able to change their name/email" do
-    pending("edit works in dev, but not in test")
     new_user = build(:user)
     click_link "Edit"
     fill_in "user_name", with: new_user.name
