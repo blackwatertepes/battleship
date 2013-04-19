@@ -15,6 +15,8 @@ class Game < ActiveRecord::Base
   def new_boards
     self.board_user = new_board unless board_user && board_user.length > 0
     self.board_comp = new_board unless board_comp && board_comp.length > 0
+    self.board_user.board_size = BOARD_SIZE
+    self.board_comp.board_size = BOARD_SIZE
   end
 
   def new_board
@@ -114,7 +116,7 @@ class Game < ActiveRecord::Base
 end
 
 class Board < Array
-  attr_reader :board_size
+  attr_accessor :board_size
 
   def initialize(size)
     @board_size = size
