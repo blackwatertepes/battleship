@@ -10,15 +10,16 @@ class Game < ActiveRecord::Base
 
   after_initialize :new_boards
 
+  BOARD_SIZE = 10
+
   def new_boards
     self.board_user = new_board unless board_user && board_user.length > 0
     self.board_comp = new_board unless board_comp && board_comp.length > 0
   end
 
   def new_board
-    board_size = 10
-    board = Board.new(board_size)
-    Array.new(board_size**2).map{|n| Unit.new }.each_slice(board_size) { |slice| board << slice }
+    board = Board.new(BOARD_SIZE)
+    Array.new(BOARD_SIZE**2).map{|n| Unit.new }.each_slice(BOARD_SIZE) { |slice| board << slice }
     board.each_with_index do |row, row_i|
       row.each_with_index do |cell, cell_i|
         cell.row = row_i
