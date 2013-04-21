@@ -110,6 +110,10 @@ $gap: ($cell - $ship) / 2;
   }
 }
 
+#game_user .cell {
+	cursor: default;
+}
+
 .panel {
   position: relative;
   margin-bottom: 20px;
@@ -162,6 +166,7 @@ $gap: ($cell - $ship) / 2;
 
   .sunk {
     text-decoration: line-through;
+	color: #f99;
   }
 
   li {
