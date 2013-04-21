@@ -13,7 +13,7 @@
  */
 
 body {
-  background: #eee;
+  background: #eee url('/assets/bg.png?');
   color: #666;
 }
 
@@ -45,7 +45,7 @@ header {
 }
 
 .content {
-  background: #fff;
+  background: rgba(255,255,255,0.5);
   min-height: 200px;
   margin-top: 20px;
   border-radius: 5px;
@@ -65,5 +65,12 @@ form {
     width: 100px;
     margin: 0px auto;
     display: block;
+	border-radius: 3px;
+	background: #fff;
+	border: 1px solid #999;
+  }
+  
+  input[type="submit"]:hover {
+	  background: #eee;
   }
 }
