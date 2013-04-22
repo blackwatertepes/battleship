@@ -1,7 +1,13 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
+  
+  before_filter :auth
 
   private
+  
+  def auth
+    redirect_to root_path unless current_user
+  end
 
   def current_user
     @current_user ||= User.find(session[:id]) if session[:id]
