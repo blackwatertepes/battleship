@@ -10,11 +10,13 @@ class ApplicationController < ActionController::Base
   end
 
   def current_user
-    @current_user ||= User.find(session[:id]) if session[:id]
+    return unless user_id = session[:id]
+    @current_user ||= User.find(user_id)
   end
 
   def current_game
-    @current_game ||= Game.find(session[:game]) if session[:game]
+    return unless game_id = session[:game]
+    @current_game ||= Game.find(game_id)
   end
 
   helper_method :current_user
