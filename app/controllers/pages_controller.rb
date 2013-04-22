@@ -1,13 +1,14 @@
 class PagesController < ApplicationController
+  skip_before_filter :auth, only: :index
+  
   def index
     redirect_to play_path if current_user
+    
     @user = User.new
     @game_count = Game.count
   end
 
   def play
-    redirect_to root_path unless current_user
-
     if current_game
       @game = current_game
     else
@@ -26,10 +27,5 @@ class PagesController < ApplicationController
     session[:id] = nil
 
     redirect_to root_path                                                                                                                                         
-  end
-
-  def proxy
-    p params
-    render :json => params
   end
 end

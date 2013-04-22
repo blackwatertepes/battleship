@@ -1,4 +1,6 @@
 class UsersController < ApplicationController
+  skip_before_filter :auth, :create
+  
   def create
     user = User.find_or_create_by_email(params[:user])
     session[:id] = user.id
