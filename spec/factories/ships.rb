@@ -2,7 +2,6 @@
 
 FactoryGirl.define do
   factory :ship do
-    name "MyString"
-    length 1
+    board
   end
 end

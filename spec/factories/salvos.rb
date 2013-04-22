@@ -2,8 +2,8 @@
 
 FactoryGirl.define do
   factory :salvo do
-    hit false
-    x 1
-    y 1
+    x 0
+    y 0
+    board
   end
 end

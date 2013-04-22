@@ -2,11 +2,6 @@
 
 FactoryGirl.define do
   factory :game do
-    board_user ""
-    board_comp ""
-    winner ""
-    user
-
-    after(:build) {|i| i.new_boards }
+    # after(:build) {|i| i.new_boards }
   end
 end
