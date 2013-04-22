@@ -1,12 +1,4 @@
 class Game < ActiveRecord::Base
-  attr_accessible :user
-
-  serialize :board_user
-  serialize :board_comp
-
-  validates_presence_of :user
-
-  belongs_to :user
 
   after_initialize :new_boards
 

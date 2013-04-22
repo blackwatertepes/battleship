@@ -1,3 +1,3 @@
 class Salvo < ActiveRecord::Base
-  attr_accessible :hit, :x, :y
+  attr_accessible :board_id, :x, :y
 end

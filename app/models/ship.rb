@@ -1,3 +1,3 @@
 class Ship < ActiveRecord::Base
-  attr_accessible :length, :name
+  attr_accessible :board_id
 end
