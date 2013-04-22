@@ -29,6 +29,10 @@ class GamesController < ApplicationController
 
     result = current_game.fire!(params[:row].to_i, params[:cell].to_i)
     current_game.save
-    redirect_to play_path
+    
+    respond_to do |format|
+      format.html {redirect_to(play_path)}
+      format.js {render json: {result: result}}
+    end
   end
 end

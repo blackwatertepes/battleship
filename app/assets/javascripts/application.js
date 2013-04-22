@@ -13,4 +13,19 @@
 //= require jquery
 //= require jquery_ujs
 //= require_tree .
-//= require turbolinks
+/*//= require turbolinks*/
+
+$(document).ready(function(e) {
+	$('#game_comp a.cell').click(function(e) {
+		e.preventDefault();
+		route = $(this).attr('href');
+		$.ajax({
+			url: route,
+			dataType: 'json'
+		}).done(function(data, status, xhr) {
+			console.log(data);
+		}).error(function(xhr, status, error) {
+			console.log(error);
+		});
+	});
+});
