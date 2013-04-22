@@ -1,5 +1,10 @@
 class Salvo < ActiveRecord::Base
-  attr_accessible :board_id, :x, :y
+  attr_accessible :board, :x, :y
   
-  validates_presence_of :x, :y
+  validates_presence_of :x, :y, :board
+  
+  belongs_to :board
+  # belongs_to :user
+  # belongs_to :game
+  
 end

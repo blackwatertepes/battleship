@@ -4,10 +4,8 @@ describe Game do
   let(:game) { build(:game) }
   # let(:user) { game.board_user }
   # let(:comp) { game.board_comp }
-
-  # it { should validate_presence_of :user }
-  # 
-  # it { should belong_to :user }
+  
+  it { should have_many :boards }
   
   it "should be valid" do
     game.should be_valid

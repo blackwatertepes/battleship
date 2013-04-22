@@ -1,7 +1,11 @@
 class Board < ActiveRecord::Base
-  attr_accessible :height, :width, :game_id, :user_id
+  attr_accessible :height, :width, :game, :user
   
-  validates_presence_of :width, :height
+  validates_presence_of :width, :height, :game, :user
+  
+  belongs_to :game
+  belongs_to :user
+  has_many :ships
   
   def injured
     floating.select{|ship| ship.injured? }

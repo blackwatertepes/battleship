@@ -4,6 +4,6 @@ FactoryGirl.define do
   factory :salvo do
     x 0
     y 0
-    # board
+    board
   end
 end

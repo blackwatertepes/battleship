@@ -1,4 +1,6 @@
 class Game < ActiveRecord::Base
+  
+  has_many :boards
 
 #   def new_boards
 #     self.board_user = new_board unless board_user && board_user.length > 0
