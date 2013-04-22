@@ -1,5 +1,8 @@
 require 'spec_helper'
 
 describe Salvo do
-  pending "add some examples to (or delete) #{__FILE__}"
+  let(:salvo) { build(:salvo) }
+  
+  it { should validate_presence_of :x }
+  it { should validate_presence_of :y }
 end

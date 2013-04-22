@@ -2,6 +2,6 @@
 
 FactoryGirl.define do
   factory :ship do
-    board
+    # board
   end
 end

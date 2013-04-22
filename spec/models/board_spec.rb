@@ -1,5 +1,12 @@
 require 'spec_helper'
 
 describe Board do
-  pending "add some examples to (or delete) #{__FILE__}"
+  let(:board) { build(:board) }
+  
+  it { should validate_presence_of :width }
+  it { should validate_presence_of :height }
+  
+  it "should be valid" do
+    board.should be_valid
+  end
 end

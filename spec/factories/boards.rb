@@ -4,7 +4,7 @@ FactoryGirl.define do
   factory :board do
     width 10
     height 10
-    game
-    user
+    # game 
+    # user
   end
 end
