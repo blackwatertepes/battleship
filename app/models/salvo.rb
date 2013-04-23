@@ -4,7 +4,5 @@ class Salvo < ActiveRecord::Base
   validates_presence_of :x, :y, :board
   
   belongs_to :board
-  # belongs_to :user
-  # belongs_to :game
   
 end

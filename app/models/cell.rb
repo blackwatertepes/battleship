@@ -4,4 +4,14 @@ class Cell < ActiveRecord::Base
   validates_presence_of :x, :y, :ship
   
   belongs_to :ship
+  
+  @hit = false
+  
+  def hit!
+    @hit = true
+  end
+  
+  def hit?
+    @hit
+  end
 end

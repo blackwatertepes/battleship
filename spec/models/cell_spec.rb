@@ -12,4 +12,18 @@ describe Cell do
   it "should be valid" do
     cell.should be_valid
   end
+  
+  it "should not be hit" do
+    cell.hit?.should be_false
+  end
+  
+  context "when hit" do
+    before(:each) do
+      cell.hit!
+    end
+    
+    it "should be hit" do
+      cell.hit?.should be_true
+    end
+  end
 end
