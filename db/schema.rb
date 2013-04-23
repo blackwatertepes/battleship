@@ -14,8 +14,8 @@
 ActiveRecord::Schema.define(:version => 20130422220345) do
 
   create_table "boards", :force => true do |t|
-    t.integer  "width"
-    t.integer  "height"
+    t.integer  "cells"
+    t.integer  "rows"
     t.integer  "game_id"
     t.integer  "user_id"
     t.datetime "created_at", :null => false

@@ -34,59 +34,6 @@ class Game < ActiveRecord::Base
 #     board
 #   end
 # 
-#   def add_ship!(ship, board)
-#     row_i, cell_i, dir = gaps(ship.length + 2, board).sample
-#     row_index = row_i
-#     cell_index = cell_i
-#     
-#     ship.length.times do |n|
-#       if dir == 'right'
-#         cell_index = cell_i + 1 + n
-#       else
-#         row_index = row_i + 1 + n
-#       end
-#       unit = Unit.new({ship: ship, n: n, dir: dir, cell: cell_index, row: row_index})
-#       board[row_index][cell_index] = unit
-#     end
-#   end
-# 
-#   def gaps(width, board)
-#     set = []
-#     board.each_with_index do |row, row_i|
-#       len = 0
-#       row.each_with_index do |cell, cell_i|
-#         len += 1
-#         if !cell.ship?
-#           if len >= width
-#             set << [row_i, cell_i - width + 1, 'right']
-#           end
-#         else
-#           len = 0
-#         end
-#       end
-#     end
-# 
-#     board.transpose.each_with_index do |row, row_i|
-#       len = 0
-#       row.each_with_index do |cell, cell_i|
-#         len += 1
-#         if !cell.ship?
-#           if len >= width
-#             set << [cell_i - width + 1, row_i, 'down']
-#           end
-#         else
-#           len = 0
-#         end
-#       end
-#     end
-#     set
-#   end
-# 
-#   def fire!(row, cell)
-#     self.board_comp[row][cell].hit!
-#     volley!
-#   end
-# 
 #   def volley!
 #     board_user.targets.sample.hit!
 #   end
@@ -104,34 +51,4 @@ class Game < ActiveRecord::Base
 #     return "Ooooh. You lost to a machine." if winner_comp?
 #   end
 # end
-#  
-# class Unit
-#   attr_accessor :ship, :n, :dir, :cell, :row
-# 
-#   def initialize(params = nil)
-#     if params
-#       @ship = params[:ship]
-#       @n = params[:n]
-#       @dir = params[:dir]
-#       @cell = params[:cell]
-#       @row = params[:row]
-#     end
-#   end
-# 
-#   def hit!
-#     if ship?
-#       @ship.body[@n] = 1
-#     else
-#       @ship = 1
-#     end
-#   end
-# 
-#   def hit?
-#     return @ship.body[@n] == 1 if ship?
-#     return @ship == 1
-#   end
-# 
-#   def ship?
-#     @ship.class == Ship
-#   end
 end

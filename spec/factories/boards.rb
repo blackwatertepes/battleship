@@ -2,9 +2,11 @@
 
 FactoryGirl.define do
   factory :board do
-    width 10
-    height 10
+    cells 10
+    rows 10
     game 
     user
+    
+    after(:build) {|n| n.gridify }
   end
 end
